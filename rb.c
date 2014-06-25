@@ -9,7 +9,7 @@
 
 typedef enum {
   blk,
-  red,
+  red
 } rb_color;
 
 #define COLORCHAR(x) ((x) == blk ? '#' : '+')
@@ -34,6 +34,9 @@ rb_tree* rb_tree_new(void);
 void rb_tree_free(rb_tree* t);
 rb_node* rb_node_new(rb_tree* t, rb_val k);
 void rb_node_free(rb_node* n);
+
+void rb_insert(rb_tree* t, rb_node* n);
+void rb_insert_all(rb_tree* t, const rb_val* keys, size_t len);
 
 
 int rotations, left_rotations, right_rotations;
@@ -134,9 +137,14 @@ pretty_tree(rb_tree* t)
 
 /*
  * Rotations:
- *     x     >-left-->     y
- *   a   y               x   c
- *      b c  <-right-<  a b
+ *
+ *       |                 |
+ *       y    <--left-<    x
+ *      / \               / \
+ *     x   c             a   y
+ *    / \                   / \
+ *   a   b    >-right->    b   c
+ *
  */
 
 static void
@@ -197,14 +205,15 @@ static void
 _rb_insert_fixup(rb_tree* t, rb_node* z)
 {
   rb_node* y;
-  int i = 0;
 
   while (z->p->c == red) {
-    i++;
     assert(t->nil.c == blk);
     if (z->p == z->p->p->l) {
       y = z->p->p->r;
       if (y->c == red) {
+        printf("case 1l:\n");
+        pretty_tree(t);
+
         z->p->c = blk;
         y->c = blk;
         z->p->p->c = red;
@@ -212,9 +221,15 @@ _rb_insert_fixup(rb_tree* t, rb_node* z)
       }
       else {
         if (z == z->p->r) {
+          printf("case 2l:\n");
+          pretty_tree(t);
+
           z = z->p;
           _rb_left_rotate(t, z);
         }
+        printf("case 3l:\n");
+        pretty_tree(t);
+
         z->p->c = blk;
         z->p->p->c = red;
         _rb_right_rotate(t, z->p->p);
@@ -224,6 +239,9 @@ _rb_insert_fixup(rb_tree* t, rb_node* z)
       assert(z->p == z->p->p->r);
       y = z->p->p->l;
       if (y->c == red) {
+        printf("case 1r:\n");
+        pretty_tree(t);
+
         z->p->c = blk;
         y->c = blk;
         z->p->p->c = red;
@@ -231,14 +249,23 @@ _rb_insert_fixup(rb_tree* t, rb_node* z)
       }
       else {
         if (z == z->p->l) {
+          printf("case 2r:\n");
+          pretty_tree(t);
+
           z = z->p;
           _rb_right_rotate(t, z);
         }
+        printf("case 3r:\n");
+        pretty_tree(t);
+
         z->p->c = blk;
         z->p->p->c = red;
         _rb_left_rotate(t, z->p->p);
       }
     }
+    printf("post:\n");
+    pretty_tree(t);
+    printf("\n");
   }
   t->root->c = blk;
 }
@@ -249,6 +276,7 @@ rb_insert(rb_tree* t, rb_node* z)
   rb_node* y = &t->nil;
   rb_node* x = t->root;
 
+  printf("inserting %d\n", z->k);
   while (x != &t->nil) {
     y = x;
     if (z->k < x->k) {
