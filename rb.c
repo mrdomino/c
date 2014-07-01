@@ -3,8 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-#define LEN(x) (sizeof (x) / sizeof *(x))
+#include "util.h"
 
 
 typedef enum {

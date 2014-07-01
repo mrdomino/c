@@ -4,7 +4,8 @@
 #include <string.h>
 #include <sys/types.h>
 
-#define LEN(x) (sizeof(x) / sizeof *(x))
+#include "util.h"
+
 
 typedef int ht_elem;
 
@@ -24,6 +25,13 @@ typedef struct {
   size_t m;
   ht_list* t[];
 } ht_slab;
+
+
+ht_slab* ht_init(size_t m);
+void ht_free(ht_slab* s);
+void ht_insert(ht_slab* s, ht_elem k);
+void ht_insert_all(ht_slab* s, const ht_elem* es, size_t len);
+ht_sack ht_look(const ht_slab* s, ht_elem k);
 
 size_t
 ht_h(size_t m, ht_elem k)
@@ -86,10 +94,10 @@ ht_insert_all(ht_slab* s, const ht_elem* es, size_t len)
 }
 
 ht_sack
-ht_look(ht_slab* s, ht_elem k)
+ht_look(const ht_slab* s, ht_elem k)
 {
-  ht_list* l = s->t[ht_h(s->m, k)];
-  ht_sack  ret;
+  const ht_list* l = s->t[ht_h(s->m, k)];
+  ht_sack        ret;
 
   memset(&ret, 0, sizeof(ret));
   for (; l; l = l->next) {
