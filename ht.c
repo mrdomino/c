@@ -32,6 +32,9 @@ void ht_insert_all(ht_slab* s, const ht_elem* es, size_t len);
 ht_sack ht_look(const ht_slab* s, ht_elem k);
 
 
+long unsigned int collisions;
+
+
 size_t
 ht_h(size_t m, ht_elem k)
 {
@@ -84,6 +87,9 @@ ht_insert(ht_slab* s, ht_elem k)
   c->next = l;
   c->k = k;
   s->t[off] = c;
+  if (l) {
+    collisions++;
+  }
 }
 
 void
@@ -142,9 +148,10 @@ main(int argc, char* argv[])
 {
   ht_slab* s;
 
-  s = ht_init(7);
+  s = ht_init(19);
   ht_insert_all(s, es, LEN(es));
   _ht_pretty(s);
+  printf("\nn:%lu m:%lu c:%lu\n", LEN(es), s->m, collisions);
 
   ht_free(s);
   return 0;
