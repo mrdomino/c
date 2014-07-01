@@ -4,6 +4,7 @@
 
 #include "util.h"
 
+
 typedef int hs_val;
 
 typedef struct {
@@ -15,11 +16,7 @@ typedef struct {
 #define PARENT(i) ((i) >> 1)
 #define LEFT(i) ((i) << 1)
 #define RIGHT(i) (1 | (i) << 1)
-#define SWAP(x, y) do { \
-  (x) = (x) ^ (y);            \
-  (y) = (x) ^ (y);            \
-  (x) = (x) ^ (y);            \
-} while (0)
+
 
 hs_heap*
 hs_heap_new(const hs_val* keys, size_t n)
