@@ -312,10 +312,10 @@ static const int keys[] = {0, -1, -2, -3, -4, -5, -6, -7, 1, 2, 3, 4};
 int
 main(){
   rb_tree* t = rb_tree_new();
-  rb_node* z;
 
   rb_insert_all(t, keys, LEN(keys));
   pretty_tree(t);
+  print_tree(t);
   rb_tree_free(t);
   printf("l:%d r:%d (%d)\n", left_rotations, right_rotations, rotations);
   return 0;

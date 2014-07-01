@@ -10,20 +10,18 @@
 typedef int ht_elem;
 
 typedef struct {
-  int full : 1;
-  union {
-    ht_elem k;
-  };
+  unsigned int     full : 1;
+  ht_elem          k;
 } ht_sack;
 
 typedef struct _ht_list {
-  ht_elem k;
+  ht_elem          k;
   struct _ht_list* next;
 } ht_list;
 
 typedef struct {
-  size_t m;
-  ht_list* t[];
+  size_t           m;
+  ht_list*         t[1];
 } ht_slab;
 
 
@@ -32,6 +30,7 @@ void ht_free(ht_slab* s);
 void ht_insert(ht_slab* s, ht_elem k);
 void ht_insert_all(ht_slab* s, const ht_elem* es, size_t len);
 ht_sack ht_look(const ht_slab* s, ht_elem k);
+
 
 size_t
 ht_h(size_t m, ht_elem k)
@@ -45,7 +44,10 @@ ht_h(size_t m, ht_elem k)
 ht_slab*
 ht_init(size_t m)
 {
-  ht_slab* ret = malloc(sizeof(ht_slab) + m * sizeof(ht_list));
+  ht_slab* ret;
+
+  assert(m != 0);
+  ret = malloc(sizeof(ht_slab) + (m - 1) * sizeof(ht_list));
 
   ret->m = m;
   memset(ret->t, 0, m * sizeof(ht_list*));
@@ -139,7 +141,6 @@ int
 main(int argc, char* argv[])
 {
   ht_slab* s;
-  int i;
 
   s = ht_init(7);
   ht_insert_all(s, es, LEN(es));
