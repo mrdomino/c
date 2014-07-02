@@ -1,8 +1,10 @@
-#include <alloca.h>
 #include <stdio.h>
 #include <string.h>
 #include "util.h"
 
+#ifdef __GNUC__
+#define alloca __builtin_alloca
+#endif
 
 void _swap(void* x, void* y, size_t sz)
 {
