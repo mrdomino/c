@@ -12,3 +12,6 @@ util.o: util.h
 clean:
 	@echo cleaning
 	@rm -f $(PROGS:%=%{,.o}) util.o
+
+grind: all
+	for p in $(PROGS); do valgrind -q ./$$p >/dev/null ; done

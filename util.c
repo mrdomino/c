@@ -9,7 +9,7 @@ void _swap(void* x, void* y, size_t sz)
   void* tmp = alloca(sz);
 
   memcpy(tmp, x, sz);
-  memcpy(x, y, sz);
+  memmove(x, y, sz);
   memcpy(y, tmp, sz);
 }
 
