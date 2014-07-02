@@ -40,33 +40,12 @@ mergesort(int* a, int* b, size_t len)
   }
 }
 
-static void
-_pretty_list_go(const int* as, size_t len)
-{
-  if (len > 0) {
-    printf("%d", *as);
-    if (len > 1) {
-      printf(", ");
-    }
-    _pretty_list_go(as + 1, len - 1);
-  }
-}
-
-void
-pretty_list(const int* as, size_t len)
-{
-  printf("{");
-  _pretty_list_go(as, len);
-  printf("}\n");
-}
-
 static int as[] = {5,4,3,2,1,20,25,34,8,7,7,4,6};
 static int bs[(LEN(as) + 1)/2];
 
 int
 main()
 {
-  pretty_list(as, LEN(as));
   mergesort(as, bs, LEN(as));
   pretty_list(as, LEN(as));
   printf("calls:%d\n", calls);

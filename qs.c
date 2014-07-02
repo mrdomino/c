@@ -49,12 +49,8 @@ static int as[] = {1, 5, 6, 8, 4, 3, 7, 12, 2, 9, 11, 10};
 
 int
 main() {
-  int i;
-
   quicksort(as, 0, LEN(as) - 1);
-  for (i = 0; i < LEN(as); i++) {
-    printf("%d\n", as[i]);
-  }
+  pretty_list(as, LEN(as));
   printf("swaps:%d calls:%d\n", swaps, calls);
   return 0;
 }
