@@ -11,10 +11,10 @@ void
 merge(const int* a, size_t a_len, const int* b, size_t b_len, int* c)
 {
   if (a_len == 0) {
-    memcpy(c, b, b_len * sizeof(int));
+    memmove(c, b, b_len * sizeof(int));
   }
   else if (b_len == 0) {
-    memcpy(c, a, a_len * sizeof(int));
+    memmove(c, a, a_len * sizeof(int));
   }
   else {
     if (*a < *b) {
@@ -33,10 +33,10 @@ merge_sort(int* a, int* b, size_t len)
 {
   calls++;
   if (len > 1) {
-    merge_sort(a, b, (len / 2));
-    merge_sort(a + (len / 2), b, (len + 1) / 2);
-    merge(a, len / 2, a + (len / 2), (len + 1) / 2, b);
-    memcpy(a, b, len * sizeof(int));
+    merge_sort(a, b, (len + 1) / 2);
+    merge_sort(a + (len + 1) / 2, b, len / 2);
+    memcpy(b, a, sizeof(int) * (len + 1) / 2);
+    merge(b, (len + 1) / 2, a + (len + 1) / 2, len / 2, a);
   }
 }
 
