@@ -29,12 +29,12 @@ merge(const int* a, size_t a_len, const int* b, size_t b_len, int* c)
 }
 
 void
-mergesort(int* a, int* b, size_t len)
+merge_sort(int* a, int* b, size_t len)
 {
   calls++;
   if (len > 1) {
-    mergesort(a, b, (len / 2));
-    mergesort(a + (len / 2), b, (len + 1) / 2);
+    merge_sort(a, b, (len / 2));
+    merge_sort(a + (len / 2), b, (len + 1) / 2);
     merge(a, len / 2, a + (len / 2), (len + 1) / 2, b);
     memcpy(a, b, len * sizeof(int));
   }
@@ -46,7 +46,7 @@ static int bs[(LEN(as) + 1)/2];
 int
 main()
 {
-  mergesort(as, bs, LEN(as));
+  merge_sort(as, bs, LEN(as));
   pretty_list(as, LEN(as));
   printf("calls:%d\n", calls);
   return 0;
