@@ -1,11 +1,14 @@
 CFLAGS=-g -Wall -pedantic -std=c89 -ansi
+PROGS=hs ht ms qs rb
 
-all: ht rb hs qs
-ht: ht.o
-rb: rb.o
-hs: hs.o util.o
-qs: qs.o util.o
-ms: ms.o util.o
+all: $(PROGS)
+
+hs: util.o
+qs: util.o
+ms: util.o
+
 util.o: util.h
+
 clean:
-	-rm ht{,.o} rb{,.o} hs{,.o} qs{,.o} util.o
+	@echo cleaning
+	@rm -f $(PROGS:%=%{,.o}) util.o
