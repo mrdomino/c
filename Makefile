@@ -1,5 +1,5 @@
 CFLAGS=-g -Wall -pedantic -std=c89 -ansi
-PROGS=hs ht ms qs rb
+PROGS=ds hs ht ms qs rb
 
 all: $(PROGS)
 
