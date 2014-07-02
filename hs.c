@@ -115,7 +115,7 @@ main(int argc, char* argv[])
   pretty_heap(h);
   hs_sort(h);
   printf("sorted:\n");
-  pretty_heap(h);
+  pretty_list(h->a + 1, h->length);
   hs_heap_free(h);
   return 0;
 }
