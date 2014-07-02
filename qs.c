@@ -3,6 +3,10 @@
 #include "util.h"
 
 
+int swaps;
+int calls;
+
+
 /* p: idx of first element
  * q: idx of last element
  */
@@ -13,13 +17,15 @@ partition(int* a, int p, int r)
   int i = p - 1;
   int j;
 
+  calls++;
+
   for (j = p; j < r; j++) {
     if (a[j] <= x) {
       i++;
-      SWAP(a[i], a[j]);
+      SWAP(a[i], a[j]); swaps++;
     }
   }
-  SWAP(a[i + 1], a[r]);
+  SWAP(a[i + 1], a[r]); swaps++;
   return i + 1;
 }
 
@@ -39,7 +45,7 @@ quicksort(int* a, int p, int r)
   }
 }
 
-static int as[] = {5, 3, 8, 12, 15, 28, 21, 37, 51, 12};
+static int as[] = {1, 5, 6, 8, 4, 3, 7, 12, 2, 9, 11, 10};
 
 int
 main() {
@@ -49,5 +55,6 @@ main() {
   for (i = 0; i < LEN(as); i++) {
     printf("%d\n", as[i]);
   }
+  printf("swaps:%d calls:%d\n", swaps, calls);
   return 0;
 }
