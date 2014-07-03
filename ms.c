@@ -32,7 +32,7 @@ merge(const int* a, size_t a_len, const int* b, size_t b_len, int* c)
 }
 
 void
-mergesort(int* a, int* b, size_t len)
+mergesort(int *restrict a, int *restrict b, size_t len)
 {
   calls++;
   if (len > 1) {

@@ -1,4 +1,4 @@
-CFLAGS=-Wall -pedantic -std=c89 -ansi
+CFLAGS=-Wall -pedantic -std=c99
 PROGS=ds hs ht ms qs rb
 
 CFLAGS+=-g
