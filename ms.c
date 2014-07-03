@@ -1,13 +1,16 @@
+#define mergesort _mergesort_xxx
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#undef mergesort
+
 #include "util.h"
 
 
 static int calls;
 
 
-void
+static void
 merge(const int* a, size_t a_len, const int* b, size_t b_len, int* c)
 {
   if (a_len == 0) {
@@ -29,12 +32,12 @@ merge(const int* a, size_t a_len, const int* b, size_t b_len, int* c)
 }
 
 void
-merge_sort(int* a, int* b, size_t len)
+mergesort(int* a, int* b, size_t len)
 {
   calls++;
   if (len > 1) {
-    merge_sort(a, b, (len + 1) / 2);
-    merge_sort(a + (len + 1) / 2, b, len / 2);
+    mergesort(a, b, (len + 1) / 2);
+    mergesort(a + (len + 1) / 2, b, len / 2);
     memcpy(b, a, sizeof(int) * (len + 1) / 2);
     merge(b, (len + 1) / 2, a + (len + 1) / 2, len / 2, a);
   }
@@ -46,7 +49,7 @@ static int bs[(LEN(as) + 1)/2];
 int
 main()
 {
-  merge_sort(as, bs, LEN(as));
+  mergesort(as, bs, LEN(as));
   pretty_list(as, LEN(as));
   printf("calls:%d\n", calls);
   return 0;
