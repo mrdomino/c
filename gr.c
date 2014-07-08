@@ -8,6 +8,7 @@
 
 typedef struct _gr_list {
   size_t           v;
+  int              w;
   struct _gr_list* n;
 } gr_list;
 
@@ -18,13 +19,18 @@ typedef enum {
 } gr_color;
 
 typedef struct {
-  size_t   d;
-/* BFS/DFS: */
-  gr_color c;
-  size_t   p;
-/* DFS: === */
-  size_t   f;
-/* ======== */
+  enum { typ_inf, typ_num } typ;
+  int               v;
+} inf_int_t;
+
+typedef struct {
+  inf_int_t d;
+/* BFS/DFS: == */
+  gr_color  c;
+  size_t    p;
+/* DFS: ====== */
+  size_t    f;
+/* =========== */
 } gr_vert;
 
 typedef struct {
@@ -45,14 +51,15 @@ gr_graph_new(size_t n)
   ret->n = n;
   for (i = 0; i < n; i++) {
     ret->vs[i].c = gr_color_wht;
-    ret->vs[i].d = n;
+    ret->vs[i].d.typ = typ_inf;
+    ret->vs[i].d.v = 0;
     ret->vs[i].p = n;
   }
   return ret;
 }
 
 void
-gr_graph_add_directed(gr_graph* g, size_t u, size_t v)
+gr_graph_add_directed(gr_graph* g, size_t u, size_t v, int w)
 {
   gr_list* un;
   assert(u < g->n);
@@ -60,6 +67,7 @@ gr_graph_add_directed(gr_graph* g, size_t u, size_t v)
 
   un = emalloc(sizeof(*un));
   un->v = v;
+  un->w = w;
   un->n = g->es[u];
   g->es[u] = un;
 }
@@ -97,12 +105,13 @@ gr_bfs(gr_graph* g, size_t s)
   for (i = 0; i < g->n; i++) {
     if (i != s) {
       g->vs[i].c = gr_color_wht;
-      g->vs[i].d = g->n;
+      g->vs[i].d.typ = typ_inf;
     }
     g->vs[i].p = g->n;
   }
   g->vs[s].c = gr_color_gry;
-  g->vs[s].d = 0;
+  g->vs[s].d.typ = typ_num;
+  g->vs[s].d.v = 0;
 
   enqueue(q, &s, sizeof s);
   while (!empty(q)) {
@@ -111,7 +120,8 @@ gr_bfs(gr_graph* g, size_t s)
       if (g->vs[l->v].c == gr_color_wht) {
         v = &g->vs[l->v];
         v->c = gr_color_gry;
-        v->d = g->vs[*u].d + 1;
+        v->d.typ = typ_num;
+        v->d.v = g->vs[*u].d.v + 1;
         v->p = *u;
         enqueue(q, &l->v, sizeof l->v);
       }
@@ -150,7 +160,8 @@ _gr_dfs_visit(gr_graph* g, size_t u, gr_list* acc)
   gr_list* tmp = emalloc(sizeof(*tmp));
 
   dfs_time = dfs_time + 1;
-  g->vs[u].d = dfs_time;
+  g->vs[u].d.typ = typ_num;
+  g->vs[u].d.v = (int)dfs_time;  // XX
   g->vs[u].c = gr_color_gry;
   for (l = g->es[u]; l; l = l->n) {
     v = &g->vs[l->v];
@@ -216,32 +227,33 @@ gr_dump_graph(const gr_graph* g)
 typedef struct {
   size_t u;
   size_t v;
+  int w;
 } edge_t;
 
 static void
 _gr_add_all(gr_graph* g, const edge_t* es, size_t len)
 {
   if (0 != len) {
-    gr_graph_add_directed(g, es->u, es->v);
+    gr_graph_add_directed(g, es->u, es->v, es->w);
     _gr_add_all(g, es + 1, len - 1);
   }
 }
 
 static const edge_t edges[] = {
-  {0, 1},
-  {1, 2},
-  {2, 3},
-  {0, 2},
-  {5, 6},
-  {7, 5},
-  {6, 8},
-  {8, 1},
-  {9, 1},
-  {10, 1},
-  {13, 10},
-  {13, 9},
-  {13, 8},
-  {3, 13}
+  {0,  1,  1},
+  {1,  2,  1},
+  {2,  3,  1},
+  {0,  2,  1},
+  {5,  6,  1},
+  {7,  5,  1},
+  {6,  8,  1},
+  {8,  1,  1},
+  {9,  1,  1},
+  {10, 1,  1},
+  {13, 10, 1},
+  {13, 9,  1},
+  {13, 8,  1},
+  {3,  13, 1}
 };
 
 int
