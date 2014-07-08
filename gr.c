@@ -40,12 +40,11 @@ gr_graph_new(size_t n)
 {
   gr_graph* ret;
   size_t    i;
-  
-  ret = malloc(sizeof(gr_graph));
-  ret->es = malloc(n * sizeof(gr_list*));
-  ret->vs = malloc(n * sizeof(gr_vert));
+
+  ret = emalloc(sizeof(gr_graph));
+  ret->es = ecalloc(n, sizeof(gr_list*));
+  ret->vs = emalloc(n * sizeof(gr_vert));
   ret->n = n;
-  memset(ret->es, 0, n * sizeof(gr_list*));
   for (i = 0; i < n; i++) {
     ret->vs[i].c = gr_color_wht;
     ret->vs[i].d = n;
@@ -61,7 +60,7 @@ gr_graph_add_directed(gr_graph* g, size_t u, size_t v)
   assert(u < g->n);
   assert(v < g->n);
 
-  un = malloc(sizeof(*un));
+  un = emalloc(sizeof(*un));
   un->v = v;
   un->n = g->es[u];
   g->es[u] = un;
@@ -84,6 +83,7 @@ gr_graph_free(gr_graph* g)
     _gr_list_free(g->es[i]);
   }
   free(g->es);
+  free(g->vs);
   free(g);
 }
 
@@ -182,6 +182,32 @@ gr_dfs(gr_graph* g)
   puts("");
 }
 
+static void
+_dump_edge(const gr_list* l)
+{
+  printf("%lu", l->v);
+  if (l->n) {
+    printf(", ");
+    _dump_edge(l->n);
+  }
+}
+
+void
+gr_dump_graph(const gr_graph* g)
+{
+  size_t i;
+
+  printf("{\n");
+  for (i = 0; i < g->n; i++) {
+    if (g->es[i]) {
+      printf("  %lu, {", i);
+      _dump_edge(g->es[i]);
+      printf("}\n");
+    }
+  }
+  printf("}\n");
+}
+
 typedef struct {
   size_t u;
   size_t v;
@@ -237,6 +263,7 @@ main()
 
   gr_dfs(g);
 
+  gr_dump_graph(g);
   gr_graph_free(g);
   return 0;
 }

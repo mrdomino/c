@@ -21,7 +21,7 @@ typedef struct {
 hs_heap*
 hs_heap_new(const hs_val* keys, size_t n)
 {
-  hs_heap* ret = malloc(sizeof(hs_heap) + n * sizeof(hs_val));
+  hs_heap* ret = emalloc(sizeof(hs_heap) + n * sizeof(hs_val));
 
   ret->length = n;
   ret->heap_size = 0;

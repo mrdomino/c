@@ -1,18 +1,40 @@
+#include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "util.h"
 
 #ifdef __GNUC__
+#undef alloca
 #define alloca __builtin_alloca
 #endif
 
-void _swap(void* x, void* y, size_t sz)
+__inline__ void
+_swap(void* x, void* y, size_t sz)
 {
   void* tmp = alloca(sz);
 
   memcpy(tmp, x, sz);
   memmove(x, y, sz);
   memcpy(y, tmp, sz);
+}
+
+__inline__ void*
+ecalloc(size_t c, size_t s)
+{
+  void* ret = calloc(c, s);
+
+  assert(ret);
+  return ret;
+}
+
+__inline__ void*
+emalloc(size_t sz)
+{
+  void* ret = malloc(sz);
+
+  assert(ret);
+  return ret;
 }
 
 static void

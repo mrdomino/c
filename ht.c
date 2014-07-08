@@ -50,7 +50,7 @@ ht_init(size_t m)
   ht_slab* ret;
 
   assert(m != 0);
-  ret = malloc(sizeof(ht_slab) + (m - 1) * sizeof(ht_list));
+  ret = emalloc(sizeof(ht_slab) + (m - 1) * sizeof(ht_list));
 
   ret->m = m;
   memset(ret->t, 0, m * sizeof(ht_list*));
@@ -82,7 +82,7 @@ ht_insert(ht_slab* s, ht_elem k)
 {
   size_t off = ht_h(s->m, k);
   ht_list* l = s->t[off];
-  ht_list* c = malloc(sizeof(*c));
+  ht_list* c = emalloc(sizeof(*c));
 
   c->next = l;
   c->k = k;

@@ -16,7 +16,7 @@ struct _queue {
 queue_t*
 queue_new()
 {
-  return calloc(1, sizeof(queue_t));
+  return ecalloc(1, sizeof(queue_t));
 }
 
 static void
@@ -37,9 +37,9 @@ void
 _enqueue(queue_t* q, const void* d, size_t sz)
 {
   list_t* n;
-  
-  n = malloc(sizeof(*n));
-  n->d = malloc(sz);
+
+  n = emalloc(sizeof(*n));
+  n->d = emalloc(sz);
   memcpy(n->d, d, sz);
   n->n = 0;
   if (0 == q->i) {

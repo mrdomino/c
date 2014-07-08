@@ -28,7 +28,7 @@ typedef struct {
 queue_t*
 queue_init(ptr_func_t free_f)
 {
-  queue_t* ret = malloc(sizeof(*ret));
+  queue_t* ret = emalloc(sizeof(*ret));
 
   ret->inn = ret->out = 0;
   ret->free_f = free_f;
@@ -55,7 +55,7 @@ queue_free(queue_t* q)
 void
 enqueue(queue_t* q, void* d)
 {
-  list_node_t* nuu = malloc(sizeof(*nuu));
+  list_node_t* nuu = emalloc(sizeof(*nuu));
 
   nuu->d = d;
   nuu->n = 0;
@@ -164,7 +164,7 @@ bfs(tree_node_t* t, int x, int* out)
 
 tree_node_t* tree_new(int d)
 {
-  tree_node_t* ret = malloc(sizeof(*ret));
+  tree_node_t* ret = emalloc(sizeof(*ret));
 
   ret->d = d;
   ret->l = ret->r = 0;

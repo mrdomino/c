@@ -52,7 +52,7 @@ _rb_node_init(rb_node* n, rb_val k, rb_color c, rb_node* nil)
 rb_tree*
 rb_tree_new()
 {
-  rb_tree* ret = malloc(sizeof *ret);
+  rb_tree* ret = emalloc(sizeof *ret);
 
   _rb_node_init(&ret->nil, 0, blk, &ret->nil);
   ret->root = &ret->nil;
@@ -62,7 +62,7 @@ rb_tree_new()
 rb_node*
 rb_node_new(rb_tree* t, rb_val k)
 {
-  rb_node* ret = malloc(sizeof *ret);
+  rb_node* ret = emalloc(sizeof *ret);
 
   _rb_node_init(ret, k, red, &t->nil);
   return ret;
