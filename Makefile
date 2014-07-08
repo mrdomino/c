@@ -36,4 +36,4 @@ clean:
 	@rm -f $(PROGS:%=%{,.o}) util.o queue.o
 
 grind: all
-	@for p in $(PROGS); do echo valgrind ./$$p; valgrind -q ./$$p >/dev/null ; done
+	@for p in $(PROGS); do echo valgrind ./$$p; valgrind ./$$p >/dev/null ; done

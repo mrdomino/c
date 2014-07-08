@@ -3,10 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "util.h"
-
-#define QUEUE_TYPE size_t
 #include "queue.h"
+#include "util.h"
 
 typedef struct _gr_list {
   size_t           v;
@@ -90,7 +88,7 @@ gr_graph_free(gr_graph* g)
 static void
 gr_bfs(gr_graph* g, size_t s)
 {
-  size_t   u;
+  size_t*  u;
   size_t   i;
   gr_list* l;
   gr_vert* v;
@@ -106,19 +104,20 @@ gr_bfs(gr_graph* g, size_t s)
   g->vs[s].c = gr_color_gry;
   g->vs[s].d = 0;
 
-  ENQUEUE(q, s);
-  while (!EMPTY(q)) {
-    u = DEQUEUE(q);
-    for (l = g->es[u]; l; l = l->n) {
+  enqueue(q, &s, sizeof s);
+  while (!empty(q)) {
+    u = dequeue(q);
+    for (l = g->es[*u]; l; l = l->n) {
       if (g->vs[l->v].c == gr_color_wht) {
         v = &g->vs[l->v];
         v->c = gr_color_gry;
-        v->d = g->vs[u].d + 1;
-        v->p = u;
-        ENQUEUE(q, l->v);
+        v->d = g->vs[*u].d + 1;
+        v->p = *u;
+        enqueue(q, &l->v, sizeof l->v);
       }
     }
-    g->vs[u].c = gr_color_blk;
+    g->vs[*u].c = gr_color_blk;
+    free(u);
   }
   queue_free(q);
 }
@@ -143,11 +142,12 @@ print_path(gr_graph* g, size_t s, size_t v)
 
 static size_t dfs_time;
 
-static void
-_gr_dfs_visit(gr_graph* g, size_t u)
+static gr_list*
+_gr_dfs_visit(gr_graph* g, size_t u, gr_list* acc)
 {
   gr_list* l;
   gr_vert* v;
+  gr_list* tmp = emalloc(sizeof(*tmp));
 
   dfs_time = dfs_time + 1;
   g->vs[u].d = dfs_time;
@@ -156,18 +156,22 @@ _gr_dfs_visit(gr_graph* g, size_t u)
     v = &g->vs[l->v];
     if (v->c == gr_color_wht) {
       v->p = u;
-      _gr_dfs_visit(g, l->v);
+      acc = _gr_dfs_visit(g, l->v, acc);
     }
   }
   g->vs[u].c = gr_color_blk;
   dfs_time = dfs_time + 1;
   g->vs[u].f = dfs_time;
+  tmp->v = u;
+  tmp->n = acc;
+  return tmp;
 }
 
-void
+gr_list*
 gr_dfs(gr_graph* g)
 {
-  size_t i;
+  size_t   i;
+  gr_list* ret = 0;
 
   for (i = 0; i < g->n; i++) {
     g->vs[i].c = gr_color_wht;
@@ -176,10 +180,11 @@ gr_dfs(gr_graph* g)
   dfs_time = 0;
   for (i = 0; i < g->n; i++) {
     if (g->vs[i].c == gr_color_wht) {
-      _gr_dfs_visit(g, i);
+      ret = _gr_dfs_visit(g, i, ret);
     }
   }
   puts("");
+  return ret;
 }
 
 static void
@@ -261,7 +266,11 @@ main()
     print_path(g, 13, 7); puts("");
   }
 
-  gr_dfs(g);
+  {
+    gr_list* topsort = gr_dfs(g);
+
+    _gr_list_free(topsort);
+  }
 
   gr_dump_graph(g);
   gr_graph_free(g);

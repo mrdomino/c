@@ -35,7 +35,7 @@ queue_free(queue_t* q)
 }
 
 void
-_enqueue(queue_t* q, const void* d, size_t sz)
+enqueue(queue_t* q, const void* d, size_t sz)
 {
   list_t* n;
 
@@ -53,7 +53,7 @@ _enqueue(queue_t* q, const void* d, size_t sz)
 }
 
 void*
-_dequeue(queue_t* q)
+dequeue(queue_t* q)
 {
   list_t* n;
   void*   d;
@@ -74,7 +74,7 @@ _dequeue(queue_t* q)
 }
 
 int
-_empty(queue_t* q)
+empty(queue_t* q)
 {
   return 0 == q->o;
 }
