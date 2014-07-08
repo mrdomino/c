@@ -247,7 +247,7 @@ static const edge_t edges[] = {
 int
 main()
 {
-  gr_graph* g = gr_graph_new(50);
+  gr_graph* g = gr_graph_new(14);
 
   _gr_add_all(g, edges, LEN(edges));
 
@@ -269,6 +269,10 @@ main()
   {
     gr_list* topsort = gr_dfs(g);
 
+    puts("topological order:");
+    _dump_edge(topsort);
+    puts("");
+    puts("");
     _gr_list_free(topsort);
   }
 
