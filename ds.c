@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "util.h"
+
 
 typedef struct _list_node {
   void*              d;

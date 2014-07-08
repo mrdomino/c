@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "queue.h"
+#include "util.h"
 
 typedef struct _list {
   void*         d;

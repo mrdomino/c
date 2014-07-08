@@ -26,8 +26,8 @@ $p: $p.o
 	@echo CC $<
 	@$(CC) -c $(CFLAGS) $<
 
-gr: queue.o util.o
-hs qs ms: util.o
+gr: queue.o
+$(PROGS): util.o
 
 util.o: util.h
 
