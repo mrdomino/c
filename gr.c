@@ -6,6 +6,7 @@
 #include "queue.h"
 #include "util.h"
 
+
 typedef struct _gr_list {
   size_t           v;
   int              w;
@@ -38,6 +39,7 @@ typedef struct {
   gr_list** es;
   gr_vert* vs;
 } gr_graph;
+
 
 gr_graph*
 gr_graph_new(size_t n)
