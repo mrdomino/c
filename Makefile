@@ -1,5 +1,5 @@
 CFLAGS=-Wall -pedantic -std=c99
-PROGS=ds gr hs ht ms qs rb
+PROGS=ds gr hc hs ht ms qs rb
 
 CFLAGS+=-g
 
@@ -27,6 +27,7 @@ $p: $p.o
 	@$(CC) -c $(CFLAGS) $<
 
 gr: queue.o
+hc: pq.o
 $(PROGS): util.o
 
 util.o: util.h
