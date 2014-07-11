@@ -1,0 +1,5 @@
+This code is written purely for my own benefit with the intention of reviewing
+basic algorithms and C syntax for tech interviews. The code and algorithms
+ought to work as advertised and with the expected asymptotic performance (or I
+probably won't get hired :) ), but it would be foolish to use any of this code
+for anything real.
