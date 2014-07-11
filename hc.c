@@ -168,20 +168,64 @@ hc_print(const hc_t* h)
 
 
 static const struct _huff_leaf ls[] = {
-  { .f = 45, .c = 'a' },
-  { .f = 23, .c = 'b' },
-  { .f = 22, .c = 'c' },
-  { .f = 25, .c = 'd' },
-  { .f = 50, .c = 'e' },
-  { .f = 20, .c = 'f' },
-  { .f = 15, .c = 'g' },
-  { .f = 12, .c = 'h' },
-  { .f = 23, .c = 'i' },
-  { .f = 34, .c = 'n' },
-  { .f = 7,  .c = 'v' },
-  { .f = 3,  .c = 'x' },
-  { .f = 5,  .c = 'y' },
-  { .f = 4,  .c = 'z' }
+#if 0
+/* frequencies from /usr/share/licenses */
+  { .f = 24464, .c = 'a' },
+  { .f = 6706, .c = 'b' },
+  { .f = 14512, .c = 'c' },
+  { .f = 15814, .c = 'd' },
+  { .f = 44961, .c = 'e' },
+  { .f = 9735, .c = 'f' },
+  { .f = 7081, .c = 'g' },
+  { .f = 16744, .c = 'h' },
+  { .f = 36872, .c = 'i' },
+  { .f = 430, .c = 'j' },
+  { .f = 1475, .c = 'k' },
+  { .f = 12864, .c = 'l' },
+  { .f = 9375, .c = 'm' },
+  { .f = 27574, .c = 'n' },
+  { .f = 37005, .c = 'o' },
+  { .f = 9750, .c = 'p' },
+  { .f = 192, .c = 'q' },
+  { .f = 29202, .c = 'r' },
+  { .f = 25855, .c = 's' },
+  { .f = 38831, .c = 't' },
+  { .f = 11319, .c = 'u' },
+  { .f = 3628, .c = 'v' },
+  { .f = 5984, .c = 'w' },
+  { .f = 751, .c = 'x' },
+  { .f = 7634, .c = 'y' },
+  { .f = 175, .c = 'z' },
+#else
+  /* frequencies from <https://en.wikipedia.org/wiki/Letter_frequency>
+     on 2014-07-11 */
+  { .f = 8167, .c = 'a' },
+  { .f = 1492, .c = 'b' },
+  { .f = 2782, .c = 'c' },
+  { .f = 4253, .c = 'd' },
+  { .f = 130001, .c = 'e' },
+  { .f = 2228, .c = 'f' },
+  { .f = 2015, .c = 'g' },
+  { .f = 6094, .c = 'h' },
+  { .f = 6966, .c = 'i' },
+  { .f = 153, .c = 'j' },
+  { .f = 772, .c = 'k' },
+  { .f = 4025, .c = 'l' },
+  { .f = 2406, .c = 'm' },
+  { .f = 6749, .c = 'n' },
+  { .f = 7507, .c = 'o' },
+  { .f = 1929, .c = 'p' },
+  { .f = 95, .c = 'q' },
+  { .f = 5987, .c = 'r' },
+  { .f = 6327, .c = 's' },
+  { .f = 9056, .c = 't' },
+  { .f = 2758, .c = 'u' },
+  { .f = 978, .c = 'v' },
+  { .f = 2360, .c = 'w' },
+  { .f = 150, .c = 'x' },
+  { .f = 1974, .c = 'y' },
+  { .f = 74, .c = 'z' },
+#endif
 };
 
 int
@@ -199,6 +243,7 @@ main(int argc, char* argv[])
   printf("%d\n", hc_bits_in(h, "x"));
   printf("%d\n", hc_bits_in(h, "y"));
   printf("%d\n", hc_bits_in(h, "abcdefghijklmnopqrstuvwxyz"));
+  printf("%d\n", hc_bits_in(h, "somerandomtestsequencewithnothingspecialinit"));
   hc_free(h);
   return 0;
 }
