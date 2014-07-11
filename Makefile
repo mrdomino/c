@@ -34,7 +34,7 @@ util.o: util.h
 
 clean:
 	@echo cleaning
-	@rm -f $(PROGS:%=%{,.o}) util.o queue.o
+	@rm -f $(PROGS:%=%{,.o}) util.o pq.o queue.o
 
 grind: all
 	@for p in $(PROGS); do echo valgrind ./$$p; valgrind ./$$p >/dev/null ; done
