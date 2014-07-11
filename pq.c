@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -15,7 +16,7 @@ struct _pq {
 
 #define LEFT(x) ((((x) + 1) << 1) - 1)
 #define RIGHT(x) (((x) + 1) << 1)
-#define PARENT(x) (((x) + 1) >> 1)
+#define PARENT(x) ((((x) + 1) >> 1) - 1)
 
 
 static void
@@ -44,18 +45,18 @@ _min_heapify(pq_t* q, size_t p)
 }
 
 static void
-_build_min_heap(pq_t* q, size_t len)
+_build_min_heap(pq_t* q)
 {
   size_t i;
   /*
    * All the leaf nodes are already heaps. We therefore only need to worry
    * about the floor(length/2) internal nodes.
    */
-  size_t count = len / 2;
+  size_t count = q->length / 2;
 
-  q->heap_size = len;
+  q->heap_size = q->length;
   for (i = 0; i < count; i++) {
-    _min_heapify(q, len / 2 - i - 1);
+    _min_heapify(q, q->length / 2 - i - 1);
   }
 }
 
@@ -68,7 +69,7 @@ pq_new(const pq_elem* es, size_t len)
   memcpy(ret->es, es, len * sizeof(*es));
   ret->length = len;
   ret->heap_size = 0;
-  _build_min_heap(ret, ret->length);
+  _build_min_heap(ret);
   return ret;
 }
 
@@ -81,16 +82,34 @@ pq_free(pq_t* q)
   free(q);
 }
 
+static void
+_decrease_key(pq_t* q, size_t x, int key)
+{
+  size_t p = PARENT(x);
+
+  if (x == 0 || q->es[p].key < key) {
+    q->es[x].key = key;
+  }
+  else {
+    SWAP(q->es[x], q->es[p]);
+    _decrease_key(q, p, key);
+  }
+}
+
 void
 pq_enqueue(pq_t* q, const pq_elem* e)
 {
+  int key = e->key;
+
   if (q->heap_size == q->length) {
     /* XX */
     q->length++;
     q->es = realloc(q->es, sizeof(pq_elem) * q->length);
   }
-  memcpy(q->es + q->heap_size, e, sizeof(pq_elem));
-  _build_min_heap(q, q->heap_size + 1);
+  q->es[q->heap_size].d = e->d;
+  q->es[q->heap_size].key = INT_MAX;
+  q->heap_size++;
+  _decrease_key(q, q->heap_size - 1, key);
 }
 
 pq_elem
